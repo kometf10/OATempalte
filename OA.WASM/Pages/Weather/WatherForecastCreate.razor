@@ -1,0 +1,47 @@
+﻿@page "/weather/create"
+@using BlazorDateRangePicker;
+@inherits WatherForecastCreateBase
+
+<div class="page-title"> @Localizer["Create"] @Localizer["Weather Forcast"]  </div>
+
+<EditForm Model="EntityItem" OnValidSubmit="HandelSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <MInputNumber @bind-Value="EntityItem.TemperatureC" For="@(() => EntityItem.TemperatureC)" Id="Tempreature" Label="Temperature C"/>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <MInputDate Type="date" Init="true" @bind-Value="EntityItem.Date" For="@(() => EntityItem.Date)" Id="Date" Label="Date" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <MInputText @bind-Value="@EntityItem.Summary" For="@(()=> EntityItem.Summary)" Label="Summary" Id="Summary" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-10">
+            <MInputSelect @bind-Value="@EntityItem.CityId" Items="@CityItems" For="@(()=> EntityItem.CityId)" Id="CityId" Label="City" />
+        </div>
+    </div>
+
+    <div class="form-group row mt-5">
+        <div class="col-sm-5">
+            <button type="submit" class="btn btn-block btn-sm btn-comp"> @Localizer["Create"] </button>         
+        </div>
+        <div class="col-sm-1 pt-1 text-center">
+            @if (CreateBusy) {<MiniLoading size="25px" />}
+        </div>
+    </div>
+</EditForm>
+
+<a class="btn btn-comp-s btn-sm" href="/wather"> @Localizer["Back to list"] </a>
+
+
+
+
+

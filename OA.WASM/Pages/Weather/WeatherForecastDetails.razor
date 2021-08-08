@@ -1,0 +1,28 @@
+﻿@page "/weather/details/{id}"
+@inherits WeatherForecastDetailsBase
+
+<h3>WeatherForecast Details</h3>
+
+@if (WeatherForecastDetails == null)
+{
+    <Loading></Loading>
+}
+else
+{
+    <div class="card">
+        <div>
+            Tamp :  @WeatherForecastDetails.TemperatureC
+        </div>
+        <div>
+            Date : @WeatherForecastDetails.Date
+        </div>
+        <div>
+            Summary : @WeatherForecastDetails.Summary
+        </div>
+    </div>
+}
+
+<a href="/wather"> Back To List </a>
+
+
+

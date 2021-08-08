@@ -1,0 +1,48 @@
+﻿@page "/weather/edit/{id}"
+@inherits WatherForecastEditBase
+
+<div class="page-title">
+    @Localizer["Edit"] @Localizer["Weather Forcast"]
+</div>
+
+<EditForm Model="EntityItem" OnValidSubmit="HandelSubmit">
+    <DataAnnotationsValidator />
+
+    <InputNumber id="ID" class="hide"
+                 @bind-Value="EntityItem.Id" />
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <MInputNumber @bind-Value="EntityItem.TemperatureC" For="@(() => EntityItem.TemperatureC)" Id="TemperatureC" Label="Temperature C" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <MInputDate Type="date" Init="false" @bind-Value="EntityItem.Date" For="@(() => EntityItem.Date)" Id="Date" Label="Date" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <MInputText @bind-Value="EntityItem.Summary" For="@(() => EntityItem.Summary )" Id="Summary" Label="Summary" Active="active" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <MInputSelect Items="CityItems"  @bind-Value="EntityItem.CityId" For="@(()=> EntityItem.CityId)" Id="City" Label="City" />
+        </div>
+    </div>
+    <div class="form-group row mt-5">
+        <div class="col-sm-5">
+            <button type="submit" class="btn btn-comp btn-block btn-sm"> @Localizer["Save"] </button>
+        </div>
+        <div class="col-sm-1 pt-1 text-center">
+            @if (EditBusy)
+            {<MiniLoading size="25px" />}
+        </div>
+    </div>
+</EditForm>
+
+<a href="/wather" class="btn btn-sm btn-comp-s"> @Localizer["Back to list"] </a>
+
+<button class="btn btn-sm btn-comp-s" @onclick="DeleteItem"> @Localizer["Delete"] </button>
+
+<Confirm @ref="Confirmation" ConfirmationChanged="ConfirmationEvent" ></Confirm>

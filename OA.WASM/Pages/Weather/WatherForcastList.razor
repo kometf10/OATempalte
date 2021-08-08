@@ -1,0 +1,67 @@
+﻿@page "/wather"
+@inherits WatherForcastListBase
+@attribute [Authorize]
+
+@if (ListData == null)
+{
+    <Loading></Loading>
+}
+else
+{
+    <div style="position:relative" class="mb-4">
+
+        <div class="page-title filter-title"> @Localizer["Weather Forcast"] </div>
+
+        <GridFilter T="OA.Domin.WeatherForecast" SearchSubmit="SearchEvent" GetIndexData="GetIndexDataEvent" @ref="GridFilterRef"></GridFilter>
+
+        <div class="filter-link">
+            <IconBtn ClassList="btn btn-outline btn-rounded btn-sm px-2" IconClassList="fas fa-plus" ClickCallBack='@(() => NavigationManager.NavigateTo("/weather/create") )'></IconBtn>
+        </div>
+
+        <div class="export-links">
+            <IconBtn ClassList="btn btn-outline btn-rounded btn-sm px-2" IconClassList="far fa-file-excel i-lg" ClickCallBack="@(() => Export("Exel", nameof(OA.Domin.WeatherForecast)))"></IconBtn>
+            <IconBtn ClassList="btn btn-outline btn-rounded btn-sm px-2" IconClassList="far fa-file-pdf i-lg" ClickCallBack="@(() => Export("Pdf", nameof(OA.Domin.WeatherForecast)))"></IconBtn>
+            @if (ExportBusy)
+            {<MiniLoading size="25px"></MiniLoading>}
+        </div>
+
+    </div>
+
+    if (GetBusy)
+    {
+        <Loading></Loading>
+    }
+    else
+    {
+        <Grid Items="ListData">
+            <GridHeader>
+                <th> @Localizer["Date"] </th>
+                <th> @Localizer["Temperature C"]</th>
+                <th> @Localizer["Temperature F"]</th>
+                <th> @Localizer["Summary"]</th>
+                <th> @Localizer["City"] </th>
+                <th> @Localizer["Options"] </th>
+            </GridHeader>
+            <GridRow>
+                <td> <span> @Localizer["Date"] </span> @context.Date.ToShortDateString()</td>
+                <td> <span> @Localizer["Temperature C"] </span> @context.TemperatureC</td>
+                <td> <span> @Localizer["Temperature F"] </span> @context.TemperatureF</td>
+                <td> <span> @Localizer["Summary"] </span> @context.Summary</td>
+                <td>
+                    <span> @Localizer["City"] </span>
+                    @if (context.City != null)
+                    {@context.City.Name}
+                </td>
+                <td>
+                    <GridRowOptions EditEvent="@(() => NavigationManager.NavigateTo("/weather/edit/" + context.Id) )"
+                                    DeleteEvent="@(() => DeleteItem(context.Id) )"
+                                    DetailsEvent="@(() => NavigationManager.NavigateTo("#"))"></GridRowOptions>
+                </td>
+            </GridRow>
+        </Grid>
+
+        <Pagination PagingData="PagingMetaData" SelectedPage="SelectedPageEvent" Spread="2"></Pagination>
+    }
+}
+
+<Confirm ConfirmationChanged="ConfirmationEvent" @ref="Confirmation" ConfirmTxt="Confirm" Title="Confirm Delete"> </Confirm>
